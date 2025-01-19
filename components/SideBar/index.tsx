@@ -103,7 +103,7 @@ const Sidebar = () => {
               placement={isCollapsed ? "right-end" : "top"}
             >
               <Button
-                onClick={() => setIsCollapsed(!isCollapsed)}
+                onPress={() => setIsCollapsed(!isCollapsed)}
                 className={`hidden md:flex items-center justify-center w-full p-2 text-black ${
                   !isCollapsed
                     ? "hover:cursor-w-resize"
