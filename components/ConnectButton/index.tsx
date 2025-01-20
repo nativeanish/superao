@@ -6,18 +6,19 @@ import {
   DropdownItem,
   Button,
 } from "@heroui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArConnect from "../../Image/ArConnect";
 import Metamask from "../../Image/MetaMask";
 import Arweave from "../../Image/Arweave";
 import Othent from "../../Image/Othent";
-import useAddress, { auth } from "../../store/useAddress";
+import useAddress, { Auth } from "../../store/useAddress";
 import * as arconnect from "../../utils/auths/arconnect";
 import * as metamaskconnct from "../../utils/auths/metamask";
 import * as arweaveConnect from "../../utils/auths/arweave";
 import * as otherconnect from "../../utils/auths/othent";
-import { Selection } from "@heroui/react";
-const key: Array<{ key: auth; label: string }> = [
+import useLocalStore from "../../store/useLocalStorage";
+import disconnect from "../../utils/disconnec";
+const key: Array<{ key: Auth; label: string }> = [
   { key: "metamask", label: "MetaMask" },
   { key: "arconnect", label: "ArConnect" },
   { key: "arweave", label: "Arweave.app" },
@@ -28,8 +29,8 @@ function ConnectButton() {
   const address = useAddress((state) => state.address);
   const auth = useAddress((state) => state.auth);
 
-  const connect = (keys: Selection) => {
-    const selectedKey = Array.from(keys)[0];
+  const connect = (selectedKey: string) => {
+    // const selectedKey = Array.from(keys)[0];
     if (selectedKey === "metamask") {
       metamaskconnct.default();
     }
@@ -43,6 +44,27 @@ function ConnectButton() {
       otherconnect.default();
     }
   };
+  const getState = useLocalStore((state) => state.getState);
+  useEffect(() => {
+    if (!address && !auth) {
+      const _address = getState("address");
+      const _auth = getState("auth");
+      console.log(_address, _auth);
+      if (_address && _address.length && _auth && _auth.length) {
+        if (_auth === "arconnect" || _auth === "arweave") {
+          window.addEventListener("arweaveWalletLoaded", () => {
+            connect(_auth);
+          });
+        } else if (_auth === "metamask") {
+          if (window.ethereum) {
+            connect(_auth);
+          }
+        } else {
+          connect(_auth);
+        }
+      }
+    }
+  }, []);
   return (
     <div>
       <Dropdown
@@ -84,14 +106,18 @@ function ConnectButton() {
           <DropdownMenu
             aria-label="Actions"
             selectionMode="single"
-            onSelectionChange={connect}
-            items={key}
+            onSelectionChange={(e) => {
+              const key = Array.from(e)[0].toString();
+              if (key === "disconnect") {
+                disconnect();
+              }
+            }}
           >
-            <DropdownItem key="metamask" startContent={<LayoutDashboard />}>
+            <DropdownItem key="dashboard" startContent={<LayoutDashboard />}>
               Dashboard
             </DropdownItem>
             <DropdownItem
-              key="arconnect"
+              key="disconnect"
               startContent={<Unplug />}
               color="danger"
             >
@@ -102,7 +128,7 @@ function ConnectButton() {
           <DropdownMenu
             aria-label="Actions"
             selectionMode="single"
-            onSelectionChange={connect}
+            onSelectionChange={(e) => connect(Array.from(e)[0].toString())}
             items={key}
           >
             <DropdownItem key="metamask" startContent={<Metamask />}>

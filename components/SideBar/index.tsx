@@ -3,20 +3,10 @@ import { ChevronLeft, ChevronRight, Plus, Menu, Search } from "lucide-react";
 import SuperAO from "../../Image/SuperAO";
 import { Button, Tooltip } from "@heroui/react";
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [_, setIsMobile] = useState(false);
+const SideBar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-      setIsCollapsed(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -104,7 +94,7 @@ const Sidebar = () => {
             >
               <Button
                 onPress={() => setIsCollapsed(!isCollapsed)}
-                className={`hidden md:flex items-center justify-center w-full p-2 text-black ${
+                className={` md:flex items-center justify-center w-full p-2 text-black ${
                   !isCollapsed
                     ? "hover:cursor-w-resize"
                     : "hover:cursor-e-resize"
@@ -127,4 +117,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SideBar;

@@ -7,9 +7,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./Image/**/*.{js,ts,jsx,tsx}",
+    "./page/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {},
   },
+  darkMode: "class",
   plugins: [heroui()],
 };
