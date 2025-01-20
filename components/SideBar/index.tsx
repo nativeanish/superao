@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Menu, Search } from "lucide-react";
 import SuperAO from "../../Image/SuperAO";
 import { Button, Tooltip } from "@heroui/react";
 
 const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-
-  useEffect(() => {}, []);
 
   return (
     <>

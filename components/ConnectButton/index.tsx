@@ -49,7 +49,6 @@ function ConnectButton() {
     if (!address && !auth) {
       const _address = getState("address");
       const _auth = getState("auth");
-      console.log(_address, _auth);
       if (_address && _address.length && _auth && _auth.length) {
         if (_auth === "arconnect" || _auth === "arweave") {
           window.addEventListener("arweaveWalletLoaded", () => {

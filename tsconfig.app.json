@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "components", "Image", "store", "utils", "page"]
+  "include": ["src", "components", "Image", "store", "utils", "page", "hooks"]
 }
