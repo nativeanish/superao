@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Menu, Search, X } from "lucide-react";
 import SuperAO from "../../Image/SuperAO";
 import { Button, Tooltip } from "@heroui/react";
@@ -7,6 +7,7 @@ const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isActive, setIsActive] = useState(false);
 
   const handleSearchClick = () => {
     setIsSearching(true);
@@ -18,6 +19,13 @@ const SideBar = () => {
     setSearchQuery("");
   };
 
+  useEffect(() => {
+    if (isActive) {
+      setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+  }, [isActive]);
   return (
     <>
       {/* Mobile toggle button */}
@@ -86,6 +94,8 @@ const SideBar = () => {
                   placeholder="Search..."
                   className="w-full px-3 py-2 bg-zinc-800 text-zinc-100 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-zinc-600"
                   autoFocus
+                  onFocus={() => setIsActive(true)}
+                  onBlur={() => setIsActive(false)}
                 />
                 <button
                   onClick={handleSearchClose}
@@ -105,7 +115,11 @@ const SideBar = () => {
                   startContent={<Search className="mr-2 h-4 w-4" />}
                   onPress={handleSearchClick}
                 >
-                  {!isCollapsed ? <>Search ...</> : null}
+                  {!isCollapsed ? (
+                    <>
+                      {searchQuery.length ? <>{searchQuery}</> : "Search ..."}
+                    </>
+                  ) : null}
                 </Button>
               </Tooltip>
             )}
