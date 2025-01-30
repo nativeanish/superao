@@ -1,10 +1,22 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Plus, Menu, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Menu, Search, X } from "lucide-react";
 import SuperAO from "../../Image/SuperAO";
 import { Button, Tooltip } from "@heroui/react";
 
 const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchClick = () => {
+    setIsSearching(true);
+    setIsCollapsed(false);
+  };
+
+  const handleSearchClose = () => {
+    setIsSearching(false);
+    setSearchQuery("");
+  };
 
   return (
     <>
@@ -65,18 +77,38 @@ const SideBar = () => {
           </div>
 
           <div className="px-4 py-4">
-            <Tooltip
-              content="Search in History"
-              placement={isCollapsed ? "right-end" : "top"}
-            >
-              <Button
-                className="w-full justify-start hover:cursor-text"
-                variant="solid"
-                startContent={<Search className="mr-2 h-4 w-4" />}
+            {isSearching && !isCollapsed ? (
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full px-3 py-2 bg-zinc-800 text-zinc-100 rounded-md pr-10 focus:outline-none focus:ring-2 focus:ring-zinc-600"
+                  autoFocus
+                />
+                <button
+                  onClick={handleSearchClose}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <Tooltip
+                content="Search in History"
+                placement={isCollapsed ? "right-end" : "top"}
               >
-                {!isCollapsed ? <>Search ...</> : null}
-              </Button>
-            </Tooltip>
+                <Button
+                  className="w-full justify-start hover:cursor-text"
+                  variant="solid"
+                  startContent={<Search className="mr-2 h-4 w-4" />}
+                  onPress={handleSearchClick}
+                >
+                  {!isCollapsed ? <>Search ...</> : null}
+                </Button>
+              </Tooltip>
+            )}
           </div>
 
           {/* Chat history could be added here */}
@@ -92,7 +124,7 @@ const SideBar = () => {
             >
               <Button
                 onPress={() => setIsCollapsed(!isCollapsed)}
-                className={` md:flex items-center justify-center w-full p-2 text-black ${
+                className={`md:flex items-center justify-center w-full p-2 text-black ${
                   !isCollapsed
                     ? "hover:cursor-w-resize"
                     : "hover:cursor-e-resize"
